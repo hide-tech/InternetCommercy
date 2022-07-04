@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    username: 'postgres'
+    password: 'postgres2'
+    url: r2dbc:postgresql://localhost:5433/shop_db
+    pool:
+      enabled: true
+      initial-size: 10
+      max-idle-time: 1m
+      max-size: 30
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+
+server:
+  port: 8800
