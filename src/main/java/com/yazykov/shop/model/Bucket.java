@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Getter
@@ -20,4 +21,5 @@ public class Bucket {
     private Customer customer;
     private Address deliveryAddress;
     private Collection<Product> products;
+    private LocalDateTime paid;
 }

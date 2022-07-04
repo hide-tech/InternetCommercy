@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("credit_cards")
-public class CreditCards {
+public class CreditCard {
     @Id
     private Long id;
     private Long customerId;

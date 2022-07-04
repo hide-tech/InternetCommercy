@@ -26,7 +26,7 @@ public class Customer implements UserDetails {
     private String name;
     private String surname;
     private Collection<Role> roles;
-    private Collection<CreditCards> cards;
+    private Collection<CreditCard> cards;
     private boolean expired;
     private boolean locked;
     private boolean enable;
