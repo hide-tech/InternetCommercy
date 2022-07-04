@@ -12,6 +12,12 @@ spring:
     r2dbc:
       repositories:
         enabled: true
+    mongodb:
+      database: mongodb
+      username: mongouser
+      password: mongopass
+      host: localhost
+      port: 27017
 
 server:
   port: 8800
