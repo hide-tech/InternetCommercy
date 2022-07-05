@@ -1,6 +1,5 @@
 package com.yazykov.shop.dto;
 
-import com.yazykov.shop.model.CreditCard;
 import com.yazykov.shop.model.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
