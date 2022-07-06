@@ -29,10 +29,15 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
 
     private Authentication validate(BearerToken token){
         String username = jwtSupport.getUsernameFromToken(token);
-        UserDetails user = customerService.findByUsername(username).block();
+        final UserDetails[] user = new UserDetails[1];
 
-        if (user != null && jwtSupport.isValidToken(token, user)){
-            return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
+        customerService.findByUsername(username).subscribe(val -> user[0] = val);
+
+        if (user[0] != null && jwtSupport.isValidToken(token, user[0])){
+            return new UsernamePasswordAuthenticationToken(
+                    user[0].getUsername(),
+                    user[0].getPassword(),
+                    user[0].getAuthorities());
         }
 
         throw new IllegalArgumentException("Token isn't valid");

@@ -9,8 +9,11 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -24,12 +27,13 @@ public class CustomerService implements ReactiveUserDetailsService {
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         Mono<CurrentUser> currentUser = customerRepository.findByUsername(username);
+        List<String> roles = new LinkedList<>();
+        Disposable subscribe = roleRepository.findRolesByUsername(username).subscribe(roles::add);
 
         return currentUser.flatMap(user -> {
             return Mono.just(User.withUsername(user.getUsername())
                     .password(user.getPassword())
-                    .authorities(Objects.requireNonNull(roleRepository.findRolesByUsername(username).collectList()
-                            .block()).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
+                    .authorities(roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
                     .build());
         });
     }

@@ -26,10 +26,11 @@ public class UserController {
 
     @PostMapping("/login")
     public Mono<BearerToken> login(@RequestBody Login login){
-        UserDetails userDetails = service.findByUsername(login.getUsername()).block();
-        if (userDetails==null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        if (encoder.matches(login.getPassword(), userDetails.getPassword())){
-            return Mono.just(jwtSupport.generateToken(userDetails.getUsername()));
+        final UserDetails[] userDetails = new UserDetails[1];
+        service.findByUsername(login.getUsername()).subscribe(usr -> userDetails[0]=usr);
+
+        if (encoder.matches(login.getPassword(), userDetails[0].getPassword())){
+            return Mono.just(jwtSupport.generateToken(userDetails[0].getUsername()));
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }

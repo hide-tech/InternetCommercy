@@ -21,7 +21,6 @@ create table customers(
     password varchar(255) not null,
     name varchar(50),
     surname varchar(50),
-    roles bigint not null,
     expired boolean not null default 'true',
     locked boolean not null default 'true',
     enable boolean not null default 'false'
@@ -29,7 +28,7 @@ create table customers(
 
 create table user_roles(
     customer_id bigint not null,
-    constraint fk_customer foreign key(customer_id) references customer(id),
+    constraint fk_customer foreign key(customer_id) references customers(id),
     role_id bigint not null,
     constraint fk_role foreign key(role_id) references roles(id)
 );
@@ -43,6 +42,15 @@ create table credit_cards(
     constraint fk_customer foreign key(customer_id) references customers(id)
 );
 
+create table buckets(
+    id bigserial primary key,
+    customer_id bigint not null,
+    constraint fk_customer_bucket foreign key(customer_id) references customers(id),
+    delivery_address bigint not null,
+    constraint fk_address foreign key(delivery_address) references address(id),
+    paid timestamp
+);
+
 create table bucket_products(
     id bigserial primary key,
     bucket_id bigint not null,
@@ -51,13 +59,4 @@ create table bucket_products(
     model varchar(255),
     price decimal(10,2),
     quantity decimal(10,2)
-);
-
-create table buckets(
-    id bigserial primary key,
-    customer_id bigint not null,
-    constraint fk_customer_bucket foreign key(customer_id) references customres(id),
-    delivery_address bigint not null,
-    constraint fk_address foreign key(delivery_address) references address(id);
-    paid timestamp without timezone
 );

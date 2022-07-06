@@ -13,7 +13,7 @@ spring:
       repositories:
         enabled: true
     mongodb:
-      database: mongodb
+      database: mongoshop
       username: mongouser
       password: mongopass
       host: localhost

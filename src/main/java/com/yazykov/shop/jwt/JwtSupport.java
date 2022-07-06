@@ -18,10 +18,10 @@ import java.time.Instant;
 @Component
 public class JwtSupport {
 
-    @Value("${jwt.secret.key}")
-    private String key;
-    @Value("${jwt.secret.expired}")
-    private Long expiredInMillis;
+//    @Value("${jwt.secret.key}")
+    private String key="superkey349083693-34-0523232=304=-205=-45=4965096";
+//    @Value("${jwt.secret.expired}")
+    private Long expiredInMillis=1000000L;
 
     private SecretKey secret = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
     private JwtParser parser = Jwts.parserBuilder().setSigningKey(secret).build();
