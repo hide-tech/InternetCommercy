@@ -1,22 +1,24 @@
 package com.yazykov.shop.configs;
 
+import com.yazykov.shop.jwt.JwtAuthenticationManager;
+import com.yazykov.shop.jwt.JwtServerAuthenticationConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ReactiveUserDetailsService userDetailsService;
+    private final JwtAuthenticationManager authenticationManager;
+    private final JwtServerAuthenticationConverter authenticationConverter;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -24,14 +26,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ReactiveAuthenticationManager reactiveAuthenticationManager(){
-        return authentication -> {
-            UserDetailsRepositoryReactiveAuthenticationManager manager =
-                    new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
-            manager.setPasswordEncoder(passwordEncoder());
-
-            return manager.authenticate(authentication);
-        };
+    public AuthenticationWebFilter authenticationWebFilter(){
+        AuthenticationWebFilter filter = new AuthenticationWebFilter(authenticationManager);
+        filter.setServerAuthenticationConverter(authenticationConverter);
+        return filter;
     }
 
     @Bean
@@ -41,6 +39,7 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyExchange().authenticated()
                 .and()
+                .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable();
