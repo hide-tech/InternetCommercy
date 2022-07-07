@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
@@ -26,12 +27,11 @@ public class UserController {
 
     @PostMapping("/login")
     public Mono<BearerToken> login(@RequestBody Login login){
-        final UserDetails[] userDetails = new UserDetails[1];
-        service.findByUsername(login.getUsername()).subscribe(usr -> userDetails[0]=usr);
 
-        if (encoder.matches(login.getPassword(), userDetails[0].getPassword())){
-            return Mono.just(jwtSupport.generateToken(userDetails[0].getUsername()));
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        return service.findByUsername(login.getUsername()).filter(userDetails -> encoder
+                .matches(login.getPassword(), userDetails.getPassword()))
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED)))
+                .flatMap(userDetails -> Mono.just(jwtSupport.generateToken(userDetails.getUsername())));
+
     }
 }

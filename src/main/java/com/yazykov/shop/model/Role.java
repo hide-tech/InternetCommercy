@@ -1,7 +1,7 @@
 package com.yazykov.shop.model;
 
 public enum Role {
-    STORE,
-    ADMIN,
-    USER
+    Role_STORE,
+    Role_ADMIN,
+    Role_USER
 }
