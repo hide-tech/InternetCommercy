@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +18,11 @@ import java.time.Instant;
 @Component
 public class JwtSupport {
 
-//    @Value("${jwt.secret.key}")
-    private String key="superkey349083693-34-0523232=304=-205=-45=4965096";
-//    @Value("${jwt.secret.expired}")
-    private Long expiredInMillis=1000000L;
+    private final String key = "secret-key-verification-for-jwt-security";
+    private final Long expiredInMillis = 1000000L;
 
-    private SecretKey secret = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
-    private JwtParser parser = Jwts.parserBuilder().setSigningKey(secret).build();
+    private final SecretKey secret = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+    private final JwtParser parser = Jwts.parserBuilder().setSigningKey(secret).build();
 
     public BearerToken generateToken(String username){
         JwtBuilder jwtBuilder = Jwts.builder()
