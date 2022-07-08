@@ -4,7 +4,6 @@ import com.yazykov.shop.dto.CreditCardDto;
 import com.yazykov.shop.dto.CustomerDto;
 import com.yazykov.shop.model.CreditCard;
 import com.yazykov.shop.model.Customer;
-import com.yazykov.shop.model.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.processing.Generated;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-07T15:37:44+0300",
+    date = "2022-07-08T11:09:17+0300",
     comments = "version: 1.5.0.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -30,10 +29,6 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerDto.setEmail( customer.getEmail() );
         customerDto.setName( customer.getName() );
         customerDto.setSurname( customer.getSurname() );
-        Collection<Role> collection = customer.getRoles();
-        if ( collection != null ) {
-            customerDto.setRoles( new ArrayList<Role>( collection ) );
-        }
         customerDto.setCards( creditCardCollectionToCreditCardDtoCollection( customer.getCards() ) );
 
         return customerDto;
@@ -51,10 +46,6 @@ public class CustomerMapperImpl implements CustomerMapper {
         customer.setEmail( customerDto.getEmail() );
         customer.setName( customerDto.getName() );
         customer.setSurname( customerDto.getSurname() );
-        Collection<Role> collection = customerDto.getRoles();
-        if ( collection != null ) {
-            customer.setRoles( new ArrayList<Role>( collection ) );
-        }
         customer.setCards( creditCardDtoCollectionToCreditCardCollection( customerDto.getCards() ) );
 
         return customer;

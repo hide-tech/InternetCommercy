@@ -24,6 +24,8 @@ public class CustomerService implements ReactiveUserDetailsService {
     public Mono<UserDetails> findByUsername(String username) {
         Mono<CurrentUser> currentUser = findCustomerByUsername(username);
 
+
+
         return currentUser.flatMap(user -> {
             return Mono.just(User.withUsername(user.getUsername())
                     .password(user.getPassword())

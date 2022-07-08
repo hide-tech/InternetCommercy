@@ -9,11 +9,6 @@ create table address(
     flat varchar(10)
 );
 
-create table roles(
-    id bigserial primary key,
-    name varchar(20) not null
-);
-
 create table customers(
     id bigserial primary key,
     username varchar(50) not null,
@@ -23,14 +18,8 @@ create table customers(
     surname varchar(50),
     expired boolean not null default 'true',
     locked boolean not null default 'true',
-    enable boolean not null default 'false'
-);
-
-create table user_roles(
-    customer_id bigint not null,
-    constraint fk_customer foreign key(customer_id) references customers(id),
-    role_id bigint not null,
-    constraint fk_role foreign key(role_id) references roles(id)
+    enable boolean not null default 'false',
+    role varchar(50) not null
 );
 
 create table credit_cards(

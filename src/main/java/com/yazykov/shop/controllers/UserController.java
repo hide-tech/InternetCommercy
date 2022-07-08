@@ -5,13 +5,13 @@ import com.yazykov.shop.jwt.JwtSupport;
 import com.yazykov.shop.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping
@@ -30,5 +30,11 @@ public class UserController {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED)))
                 .flatMap(userDetails -> Mono.just(jwtSupport.generateToken(userDetails.getUsername()).getValue()));
 
+    }
+
+    @GetMapping("/about")
+    public Mono<String> about(@AuthenticationPrincipal Principal principal){
+
+        return Mono.just(principal.getName());
     }
 }

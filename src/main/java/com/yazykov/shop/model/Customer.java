@@ -7,10 +7,11 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class Customer implements UserDetails {
     private String password;
     private String name;
     private String surname;
-    private Collection<Role> roles;
+    private Role role;
     private Collection<CreditCard> cards;
     private boolean expired;
     private boolean locked;
@@ -33,12 +34,7 @@ public class Customer implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return role.name();
-            }
-        }).collect(Collectors.toList());
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
