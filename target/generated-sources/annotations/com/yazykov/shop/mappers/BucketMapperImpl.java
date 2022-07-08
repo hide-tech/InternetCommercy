@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-08T13:34:21+0300",
+    date = "2022-07-08T16:00:03+0300",
     comments = "version: 1.5.0.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -124,12 +124,12 @@ public class BucketMapperImpl implements BucketMapper {
 
         ProductDto productDto = new ProductDto();
 
+        productDto.setId( product.getId() );
         productDto.setName( product.getName() );
         productDto.setModel( product.getModel() );
         productDto.setDescription( product.getDescription() );
         productDto.setPrice( product.getPrice() );
         productDto.setQuantity( product.getQuantity() );
-        productDto.setSupply_date( product.getSupply_date() );
 
         return productDto;
     }
@@ -216,12 +216,12 @@ public class BucketMapperImpl implements BucketMapper {
 
         Product product = new Product();
 
+        product.setId( productDto.getId() );
         product.setName( productDto.getName() );
         product.setModel( productDto.getModel() );
         product.setDescription( productDto.getDescription() );
         product.setPrice( productDto.getPrice() );
         product.setQuantity( productDto.getQuantity() );
-        product.setSupply_date( productDto.getSupply_date() );
 
         return product;
     }

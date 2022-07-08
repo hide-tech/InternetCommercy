@@ -13,9 +13,7 @@ spring:
       repositories:
         enabled: true
     mongodb:
-      database: mongoshop
-      username: mongouser
-      password: mongopass
+      database: mystore
       host: localhost
       port: 27017
 

@@ -1,5 +1,6 @@
 package com.yazykov.shop.model;
 
+import com.yazykov.shop.dto.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(collection = "products")
 public class Product {
     @Id
     private String id;
@@ -24,4 +25,12 @@ public class Product {
     private BigDecimal price;
     private Long quantity;
     private LocalDateTime supply_date;
+
+    public Product(ProductDto productDto){
+        this.name = productDto.getName();
+        this.model = productDto.getModel();
+        this.description = productDto.getDescription();
+        this.price = productDto.getPrice();
+        this.quantity = productDto.getQuantity();
+    }
 }

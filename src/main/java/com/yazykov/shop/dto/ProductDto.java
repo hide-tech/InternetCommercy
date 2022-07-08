@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class ProductDto {
+    private String id;
     private String name;
     private String model;
     private String description;
     private BigDecimal price;
     private Long quantity;
-    private LocalDateTime supply_date;
 }
