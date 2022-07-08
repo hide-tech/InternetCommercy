@@ -5,6 +5,8 @@ import com.yazykov.shop.jwt.JwtServerAuthenticationConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -14,6 +16,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 
 @EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -37,6 +40,7 @@ public class SecurityConfig {
         http
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/login").permitAll()
+                .pathMatchers(HttpMethod.POST, "/create").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)

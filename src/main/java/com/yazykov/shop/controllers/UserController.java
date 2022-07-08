@@ -5,6 +5,7 @@ import com.yazykov.shop.jwt.JwtSupport;
 import com.yazykov.shop.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class UserController {
 
     }
 
+    @PreAuthorize("hasRole('Role_ADMIN') or hasRole('Role_USER')")
     @GetMapping("/about")
     public Mono<String> about(@AuthenticationPrincipal Principal principal){
 
