@@ -51,4 +51,15 @@ public class StoreController {
                                                    @RequestParam("max") double max){
         return service.getAllInRange(min, max);
     }
+
+    @GetMapping("/check")
+    public Mono<Boolean> checkProductOnStore(@RequestParam("id") String id, @RequestParam("qty") Long qty){
+        return service.checkAvailableProduct(id, qty);
+    }
+
+    @PostMapping("/reserve")
+    public Mono<Boolean> reserveProduct(@RequestBody Mono<ProductDto> productDtoFlux,
+                                            @RequestParam("qty") Long qty){
+        return service.reserveProduct(productDtoFlux, qty);
+    }
 }
