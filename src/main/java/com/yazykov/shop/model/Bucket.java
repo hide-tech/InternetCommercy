@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -14,11 +14,11 @@ import java.util.Collection;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("buckets")
+@Document(collation = "buckets")
 public class Bucket {
     @Id
-    private Long id;
-    private Customer customer;
+    private String id;
+    private Long customerId;
     private Address deliveryAddress;
     private Collection<Product> products;
     private LocalDateTime paid;

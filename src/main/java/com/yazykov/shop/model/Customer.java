@@ -1,5 +1,6 @@
 package com.yazykov.shop.model;
 
+import com.yazykov.shop.dto.NewCustomerAccount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,21 @@ public class Customer implements UserDetails {
     private String name;
     private String surname;
     private Role role;
-    private Collection<CreditCard> cards;
     private boolean expired;
     private boolean locked;
     private boolean enable;
+
+    public Customer(NewCustomerAccount account){
+        username = account.getUsername();
+        email = account.getEmail();
+        password = account.getPassword();
+        name = account.getName();
+        surname = account.getSurname();
+        role = Role.Role_USER;
+        expired = false;
+        locked = false;
+        enable = true;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

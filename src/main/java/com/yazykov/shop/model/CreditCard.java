@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("credit_cards")
+@Table("cards")
 public class CreditCard {
     @Id
     private Long id;

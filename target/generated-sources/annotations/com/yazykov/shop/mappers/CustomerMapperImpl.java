@@ -1,17 +1,13 @@
 package com.yazykov.shop.mappers;
 
-import com.yazykov.shop.dto.CreditCardDto;
 import com.yazykov.shop.dto.CustomerDto;
-import com.yazykov.shop.model.CreditCard;
 import com.yazykov.shop.model.Customer;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-08T16:00:03+0300",
+    date = "2022-07-13T16:14:19+0300",
     comments = "version: 1.5.0.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -29,7 +25,7 @@ public class CustomerMapperImpl implements CustomerMapper {
         customerDto.setEmail( customer.getEmail() );
         customerDto.setName( customer.getName() );
         customerDto.setSurname( customer.getSurname() );
-        customerDto.setCards( creditCardCollectionToCreditCardDtoCollection( customer.getCards() ) );
+        customerDto.setRole( customer.getRole() );
 
         return customerDto;
     }
@@ -46,64 +42,8 @@ public class CustomerMapperImpl implements CustomerMapper {
         customer.setEmail( customerDto.getEmail() );
         customer.setName( customerDto.getName() );
         customer.setSurname( customerDto.getSurname() );
-        customer.setCards( creditCardDtoCollectionToCreditCardCollection( customerDto.getCards() ) );
+        customer.setRole( customerDto.getRole() );
 
         return customer;
-    }
-
-    protected CreditCardDto creditCardToCreditCardDto(CreditCard creditCard) {
-        if ( creditCard == null ) {
-            return null;
-        }
-
-        CreditCardDto creditCardDto = new CreditCardDto();
-
-        creditCardDto.setCustomerId( creditCard.getCustomerId() );
-        creditCardDto.setCardNumber( creditCard.getCardNumber() );
-        creditCardDto.setExpireDate( creditCard.getExpireDate() );
-        creditCardDto.setCvv( creditCard.getCvv() );
-
-        return creditCardDto;
-    }
-
-    protected Collection<CreditCardDto> creditCardCollectionToCreditCardDtoCollection(Collection<CreditCard> collection) {
-        if ( collection == null ) {
-            return null;
-        }
-
-        Collection<CreditCardDto> collection1 = new ArrayList<CreditCardDto>( collection.size() );
-        for ( CreditCard creditCard : collection ) {
-            collection1.add( creditCardToCreditCardDto( creditCard ) );
-        }
-
-        return collection1;
-    }
-
-    protected CreditCard creditCardDtoToCreditCard(CreditCardDto creditCardDto) {
-        if ( creditCardDto == null ) {
-            return null;
-        }
-
-        CreditCard creditCard = new CreditCard();
-
-        creditCard.setCustomerId( creditCardDto.getCustomerId() );
-        creditCard.setCardNumber( creditCardDto.getCardNumber() );
-        creditCard.setExpireDate( creditCardDto.getExpireDate() );
-        creditCard.setCvv( creditCardDto.getCvv() );
-
-        return creditCard;
-    }
-
-    protected Collection<CreditCard> creditCardDtoCollectionToCreditCardCollection(Collection<CreditCardDto> collection) {
-        if ( collection == null ) {
-            return null;
-        }
-
-        Collection<CreditCard> collection1 = new ArrayList<CreditCard>( collection.size() );
-        for ( CreditCardDto creditCardDto : collection ) {
-            collection1.add( creditCardDtoToCreditCard( creditCardDto ) );
-        }
-
-        return collection1;
     }
 }

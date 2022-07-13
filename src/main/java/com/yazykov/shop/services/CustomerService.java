@@ -1,6 +1,11 @@
 package com.yazykov.shop.services;
 
+import com.yazykov.shop.dto.CustomerDto;
+import com.yazykov.shop.dto.NewCustomerAccount;
+import com.yazykov.shop.mappers.CustomerMapper;
 import com.yazykov.shop.model.CurrentUser;
+import com.yazykov.shop.model.Customer;
+import com.yazykov.shop.repositories.CustomerRepository;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +13,7 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,12 +25,12 @@ import java.util.function.BiFunction;
 public class CustomerService implements ReactiveUserDetailsService {
 
     private final DatabaseClient databaseClient;
+    private final CustomerRepository repository;
+    private final CustomerMapper mapper;
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         Mono<CurrentUser> currentUser = findCustomerByUsername(username);
-
-
 
         return currentUser.flatMap(user -> {
             return Mono.just(User.withUsername(user.getUsername())
@@ -32,6 +38,12 @@ public class CustomerService implements ReactiveUserDetailsService {
                     .roles(user.getRole())
                     .build());
         });
+    }
+
+    public Flux<CustomerDto> createUser(Mono<NewCustomerAccount> customerAccountMono){
+        return repository.saveAll(customerAccountMono.map(Customer::new)
+                        .doOnNext(c -> c.setPassword(new BCryptPasswordEncoder().encode(c.getPassword()))))
+                .map(mapper::customerToCustomerDto);
     }
 
     private Flux<String> findRolesByUsername(String username){
@@ -60,4 +72,16 @@ public class CustomerService implements ReactiveUserDetailsService {
                     row.get("username", String.class),
                     row.get("password", String.class),
                     row.get("role", String.class));
+
+    public Flux<CustomerDto> findAllUsers() {
+        return repository.findAll().map(mapper::customerToCustomerDto);
+    }
+
+    public Mono<CustomerDto> findUserById(Long id) {
+        return repository.findById(id).map(mapper::customerToCustomerDto);
+    }
+
+    public Mono<Customer> enterIntoUserAccount(String username) {
+        return repository.findByUsername(username);
+    }
 }

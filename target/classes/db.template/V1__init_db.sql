@@ -11,7 +11,7 @@ create table address(
 
 create table customers(
     id bigserial primary key,
-    username varchar(50) not null,
+    username varchar(50) not null unique,
     email varchar(255) not null unique,
     password varchar(255) not null,
     name varchar(50),
