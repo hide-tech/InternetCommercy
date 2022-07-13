@@ -2,7 +2,6 @@ package com.yazykov.shop.services;
 
 import com.yazykov.shop.dto.ProductDto;
 import com.yazykov.shop.mappers.ProductMapper;
-import com.yazykov.shop.model.Product;
 import com.yazykov.shop.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Range;
@@ -56,8 +55,8 @@ public class ProductService {
                 .hasElement();
     }
 
-    public Mono<Boolean> reserveProduct(Mono<ProductDto> product, Long qty){
-        return repository.findById(product.map(mapper::productDtoToProduct).map(Product::getId))
+    public Mono<Boolean> reserveProduct(String id, Long qty){
+        return repository.findById(id)
                 .filter(p -> p.getQuantity()>=qty)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Not enough in stock")))
                 .doOnNext(p -> p.setQuantity(p.getQuantity()-qty))

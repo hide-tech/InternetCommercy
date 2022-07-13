@@ -58,8 +58,8 @@ public class StoreController {
     }
 
     @PostMapping("/reserve")
-    public Mono<Boolean> reserveProduct(@RequestBody Mono<ProductDto> productDtoFlux,
+    public Mono<Boolean> reserveProduct(@RequestParam("id") String id,
                                             @RequestParam("qty") Long qty){
-        return service.reserveProduct(productDtoFlux, qty);
+        return service.reserveProduct(id, qty);
     }
 }
