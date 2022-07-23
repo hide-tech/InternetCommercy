@@ -14,7 +14,7 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 public class BucketDto {
-    private CustomerDto customer;
+    private Long customerId;
     private AddressDto deliveryAddress;
     private Collection<ProductDto> products;
     private LocalDateTime paid;

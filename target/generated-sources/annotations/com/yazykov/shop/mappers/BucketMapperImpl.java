@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-13T16:14:19+0300",
+    date = "2022-07-23T13:16:18+0300",
     comments = "version: 1.5.0.Final, compiler: javac, environment: Java 18.0.1.1 (Oracle Corporation)"
 )
 @Component
@@ -27,6 +27,7 @@ public class BucketMapperImpl implements BucketMapper {
 
         BucketDto bucketDto = new BucketDto();
 
+        bucketDto.setCustomerId( bucket.getCustomerId() );
         bucketDto.setDeliveryAddress( addressToAddressDto( bucket.getDeliveryAddress() ) );
         bucketDto.setProducts( productCollectionToProductDtoCollection( bucket.getProducts() ) );
         bucketDto.setPaid( bucket.getPaid() );
@@ -42,6 +43,7 @@ public class BucketMapperImpl implements BucketMapper {
 
         Bucket bucket = new Bucket();
 
+        bucket.setCustomerId( bucketDto.getCustomerId() );
         bucket.setDeliveryAddress( addressDtoToAddress( bucketDto.getDeliveryAddress() ) );
         bucket.setProducts( productDtoCollectionToProductCollection( bucketDto.getProducts() ) );
         bucket.setPaid( bucketDto.getPaid() );

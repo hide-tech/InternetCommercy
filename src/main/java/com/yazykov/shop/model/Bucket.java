@@ -14,7 +14,7 @@ import java.util.Collection;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collation = "buckets")
+@Document(collection = "buckets")
 public class Bucket {
     @Id
     private String id;
