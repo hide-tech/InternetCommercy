@@ -2,6 +2,7 @@ package com.yazykov.shop.services;
 
 import com.yazykov.shop.dto.CustomerDto;
 import com.yazykov.shop.dto.NewCustomerAccount;
+import com.yazykov.shop.dto.errors.UserNotFoundException;
 import com.yazykov.shop.mappers.CustomerMapper;
 import com.yazykov.shop.model.CurrentUser;
 import com.yazykov.shop.model.Customer;
@@ -78,10 +79,26 @@ public class CustomerService implements ReactiveUserDetailsService {
     }
 
     public Mono<CustomerDto> findUserById(Long id) {
-        return repository.findById(id).map(mapper::customerToCustomerDto);
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("User not exist with id: "+id)))
+                .map(mapper::customerToCustomerDto);
     }
 
     public Mono<Customer> enterIntoUserAccount(String username) {
         return repository.findByUsername(username);
+    }
+
+    public Mono<CustomerDto> banCustomer(Long customerId){
+        return repository.findById(customerId)
+                .doOnNext(customer -> customer.setLocked(true))
+                .flatMap(repository::save)
+                .map(mapper::customerToCustomerDto);
+    }
+
+    public Mono<CustomerDto> unbanCustomer(Long customerId){
+        return repository.findById(customerId)
+                .doOnNext(customer -> customer.setLocked(false))
+                .flatMap(repository::save)
+                .map(mapper::customerToCustomerDto);
     }
 }

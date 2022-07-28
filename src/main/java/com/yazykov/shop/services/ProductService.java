@@ -1,6 +1,7 @@
 package com.yazykov.shop.services;
 
 import com.yazykov.shop.dto.ProductDto;
+import com.yazykov.shop.dto.errors.ProductNotFoundException;
 import com.yazykov.shop.mappers.ProductMapper;
 import com.yazykov.shop.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class ProductService {
 
     public Mono<ProductDto> getProductById(String id){
         return repository.findById(id)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException("Product not found with id: "+id)))
                 .map(mapper::productToProductDto);
     }
 
@@ -43,6 +45,7 @@ public class ProductService {
 
     public Mono<ProductDto> updateProduct(String id, Mono<ProductDto> productDto){
         return repository.findById(id)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException("Product not found with id: "+id)))
                 .flatMap(p -> productDto.map(mapper::productDtoToProduct))
                 .doOnNext(e -> e.setId(id))
                 .flatMap(repository::save)

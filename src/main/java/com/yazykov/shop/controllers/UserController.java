@@ -65,4 +65,16 @@ public class UserController {
     public Mono<Customer> enterIntoAccount(@PathVariable("username") String username){
         return service.enterIntoUserAccount(username);
     }
+
+    @GetMapping("/customers/ban/{id}")
+    @PreAuthorize("hasRole('Role_ADMIN')")
+    public Mono<CustomerDto> banUser(@PathVariable("id") Long customerId){
+        return service.banCustomer(customerId);
+    }
+
+    @GetMapping("/customers/unban/{id}")
+    @PreAuthorize("hasRole('Role_ADMIN')")
+    public Mono<CustomerDto> unbanUser(@PathVariable("id") Long customerId){
+        return service.unbanCustomer(customerId);
+    }
 }
